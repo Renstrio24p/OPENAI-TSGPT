@@ -12,7 +12,8 @@
     "ts-node": "^10.9.2"
   },
   "scripts": {
-    "start": "rimraf ./dist && ts-node esbuild.config.ts -w"
+    "start": "rimraf ./dist && ts-node esbuild.config.ts -w",
+    "build": "rimraf ./dist && ts-node esbuild.config.ts -build"
   },
   "dependencies": {
     "alive-server": "^1.3.0",
