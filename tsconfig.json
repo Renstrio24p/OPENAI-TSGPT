@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "strict": true,
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "removeComments": true, // Updated to remove comments
+    "allowSyntheticDefaultImports": true,
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "isolatedModules": false,
+    "alwaysStrict": true,
+    "sourceRoot": "**/*",
+    "forceConsistentCasingInFileNames": false
+  },
+  "exclude": ["node_modules"]
+}
