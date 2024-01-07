@@ -1,6 +1,6 @@
 const esbuild = require('esbuild');
 const { copy } = require('esbuild-plugin-copy');
-const liveServer = require("alive-server");
+const liveServer = require('alive-server');
 const fs = require('fs');
 const DotEnv = require('dotenv');
 
@@ -8,9 +8,8 @@ DotEnv.config();
 
 let server: any;
 
-const buildProject = async () => {
-  try {
-    const ctx = await esbuild.context({
+const buildProject = () => {
+     esbuild.build({
       entryPoints: ['src/index.ts', 'index.html'],
       chunkNames: 'chunks/[name]-[hash]',
       outdir: 'dist',
@@ -36,10 +35,6 @@ const buildProject = async () => {
         'process.env': JSON.stringify(process.env),
       },
     });
-    ctx.watch()
-  } catch (error) {
-    console.error('Build failed:', error);
-  }
 };
 
 const startServer = () => {
@@ -58,13 +53,16 @@ const startServer = () => {
   console.log(`Server is running at https://localhost:${serverParams.port}/`);
 };
 
-const buildAndServe = async () => {
+const startProject = async () => {
   await buildProject();
   startServer();
 };
+const buildOnly = async () => {
+  return await buildProject();
+};
 
 const stopServer = () => {
-  if (liveServer) {
+  if (server) {
     console.log('Stopping server...');
     liveServer.stop();
     console.log('Server stopped.');
@@ -76,4 +74,10 @@ process.on('SIGINT', () => {
   process.exit();
 });
 
-buildAndServe();
+const hasBuildArg = process.argv.includes('-build');
+
+if (hasBuildArg) {
+  buildOnly();
+} else {
+  startProject();
+}
