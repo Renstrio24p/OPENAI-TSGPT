@@ -36,6 +36,35 @@ const buildProject = () => {
       },
     });
 };
+const serveProject = async() => {
+     const ctx = await esbuild.context({
+      entryPoints: ['src/index.ts', 'index.html'],
+      chunkNames: 'chunks/[name]-[hash]',
+      outdir: 'dist',
+      bundle: true,
+      allowOverwrite: true,
+      plugins: [
+        copy({
+          assets: [
+            { from: './src/images/*', to: './' },
+            { from: './src/secure', to: './secure' },
+          ],
+          watch: true,
+        }),
+      ],
+      write: true,
+      loader: {
+        '.html': 'copy',
+        '.css': 'css',
+        '.png': 'file',
+      },
+      define: {
+        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
+        'process.env': JSON.stringify(process.env),
+      },
+    });
+    ctx.watch()
+};
 
 const startServer = () => {
   const serverParams = {
@@ -54,11 +83,11 @@ const startServer = () => {
 };
 
 const startProject = async () => {
-  await buildProject();
+  await serveProject();
   startServer();
 };
 const buildOnly = async () => {
-  return await buildProject();
+  return buildProject();
 };
 
 const stopServer = () => {
